@@ -21,7 +21,15 @@ router.get('/:id', validateProjectId, (req,res) =>{
 })
 
 router.post('/', validateProject, (req,res) =>{
-    
+    projectDb.insert(req.body)
+    .then(proj =>{
+        res.status(200).json(proj);
+    })
+    .catch(err =>{
+        res.status(500).json({message:"There was an internal error while creating a Project",
+        error:err
+        });
+    })
 })
 
 router.put('/:id', validateProjectId, validateProject, (req,res) =>{
@@ -56,7 +64,14 @@ function validateProjectId(req,res,next){
     })
 }
 function validateProject(req,res,next){
+    const {name, description} = req.body;
+    if(!name || !description || name === "" || description === ""){
+        res.status(404).json({ message: "missing required name and description field" });
+    }
+    else{
 
+        next();
+    }
 }
 
 module.exports = router;
