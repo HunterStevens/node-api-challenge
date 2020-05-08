@@ -15,9 +15,11 @@ Go code!
 const express = require('Express');
 const server = express();
 const projectsRouter = require('./routers/projectsRouter');
+const actionsRouter = require('./routers/actionsRouter');
 const port = process.env.PORT || 5000;
 server.use(express.json());
 
-server.use('/api/projects', projectsRouter)
+server.use('/api/projects', projectsRouter);
+server.use('/api/actions', actionsRouter);
 
 server.listen(port, console.log("API running"));

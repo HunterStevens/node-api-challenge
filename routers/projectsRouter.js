@@ -1,7 +1,5 @@
 const express = require('express');
-const server = express();
 const router = express.Router();
-const actionsRouter = require('./actionsRouter');
 const projectDb = require('../data/helpers/projectModel');
 
 router.get('/', (req,res) =>{
@@ -18,6 +16,17 @@ router.get('/', (req,res) =>{
 
 router.get('/:id', validateProjectId, (req,res) =>{
     res.status(200).json(req.user);
+})
+
+router.get('/:id/actions', validateProjectId, (req,res) =>{
+    const {id} = req.user;
+    projectDb.getProjectActions(id)
+    .then(list =>{
+
+    })
+    .catch(err =>{
+
+    })
 })
 
 router.post('/', validateProject, (req,res) =>{
