@@ -9,12 +9,14 @@ router.get('/:id', validateActionId, (req,res) =>{
 
 router.post('/:id', validateProjectId, validateAction, (req,res) =>{
     const {id} = req.user;
-    actionsDb.insert(id, req.body)
+    const newAction = req.body;
+    newAction.project_id = id;
+    actionsDb.insert(newAction)
     .then(proj =>{
-        res.status(200).json(proj);
+        projectDb.getProjectActions(id)
     })
     .catch(err =>{
-        res.status(500).json({message:"There was an internal error while creating a Project",
+        res.status(500).json({message:"There was an internal error while creating an action",
         error:err
         });
     })
@@ -38,7 +40,7 @@ router.delete('/:id', validateActionId, (req,res) =>{
     actionsDb.remove(id)
     .then(proj =>{
         console.log(proj);
-        actionsDb.get()
+        projectDb.get()
         .then(list =>{
             res.status(200).json(list);
         })
@@ -92,12 +94,11 @@ function validateActionId(req,res,next){
     })
 }
 function validateAction(req,res,next){
-    const {name, description, notes} = req.body;
-    if(!name || !description || notes || name === "" || description === "" || notes === ""){
-        res.status(404).json({ message: "missing required name and description field" });
+    const {description, notes} = req.body;
+    if(!description || !notes || description === "" || notes === ""){
+        res.status(404).json({ message: "missing required notes and description field" });
     }
     else{
-
         next();
     }
 }

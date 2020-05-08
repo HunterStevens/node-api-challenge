@@ -22,10 +22,17 @@ router.get('/:id/actions', validateProjectId, (req,res) =>{
     const {id} = req.user;
     projectDb.getProjectActions(id)
     .then(list =>{
+        if(list.length === 0){
+            res.status(404).json({message:"the project with that ID doesn't have any existing actions."})            
 
+        }else{
+            res.status(200).json(list);
+        }
     })
     .catch(err =>{
-
+        res.status(500).json({message:"There was an internal error retrieving the data",
+        error:err
+        })
     })
 })
 
