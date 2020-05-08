@@ -33,11 +33,39 @@ router.post('/', validateProject, (req,res) =>{
 })
 
 router.put('/:id', validateProjectId, validateProject, (req,res) =>{
-    
+    const {id} = req.user;
+    projectDb.update(id, req.body)
+    .then(proj =>{
+        res.status(200).json(proj);
+    })
+    .catch(err =>{
+        res.status(500).json({message:"There was an internal error while updating a Project",
+        error:err
+        });
+    })
 })
 
 router.delete('/:id', validateProjectId, (req,res) =>{
-    
+    const {id} = req.params;
+    projectDb.remove(id)
+    .then(proj =>{
+        console.log(proj);
+        projectDb.get()
+        .then(list =>{
+            res.status(200).json(list);
+        })
+        .catch(err =>{
+            res.status(500).json({message:"There was an internal error retrieving the data after deleting a project",
+            error:err
+            })
+        })
+    })
+    .catch(err =>{
+        Console.log(err);
+        res.status(500).json({message:"There was an internal error while deleting a Project",
+        error:err
+        });
+    })
 })
 
 function validateProjectId(req,res,next){
