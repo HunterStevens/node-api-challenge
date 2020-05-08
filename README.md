@@ -39,14 +39,19 @@ Commit your code regularly and use descriptive messages. This helps both you (in
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your Team Lead.
 
 - [ ] Mention two parts of Express that you learned about this week.
+You can build routers which can help dry up the code into seperate files (similar to components). Express can provide many "convenience helpers" which allow us to manipulate databases upon CRUD operations.
 
 - [ ] Describe Middleware?
+It is a set of functions that can be invoked by server/router requests. It has its own set of code for the request to go through before going through the main operation.
 
 - [ ] Describe a Resource?
+Resource is a data set by the database that can be accessed via a unique URL and can be manipulated through methods.
 
 - [ ] What can the API return to help clients know if a request was successful?
+The set of data that was requested in one of the CRUD operations.
 
 - [ ] How can we partition our application into sub-applications?
+by creating Express Routers to split the single application. Therefore making data management easier to understand and efficient.
 
 ## Minimum Viable Product
 
