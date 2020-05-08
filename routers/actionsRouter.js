@@ -36,11 +36,11 @@ router.put('/:id', validateActionId, validateAction, (req,res) =>{
 })
 
 router.delete('/:id', validateActionId, (req,res) =>{
-    const {id} = req.params;
+    const {id, project_id} = req.user;
     actionsDb.remove(id)
     .then(proj =>{
         console.log(proj);
-        projectDb.get()
+        projectDb.get(project_id)
         .then(list =>{
             res.status(200).json(list);
         })
