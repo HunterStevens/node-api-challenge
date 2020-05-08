@@ -3,35 +3,13 @@ const router = express.Router();
 const actionsDb = require('../data/helpers/actionModel');
 const projectDb = require('../data/helpers/projectModel');
 
-router.get('/', (req,res) =>{
-    actionsDb.get()
-    .then(list =>{
-        res.status(200).json(list);
-    })
-    .catch(err =>{
-        res.status(500).json({message:"There was an internal error retrieving the data",
-        error:err
-        })
-    })
-})
-
 router.get('/:id', validateActionId, (req,res) =>{
     res.status(200).json(req.user);
 })
 
-router.get('/:id/actions', validateActionId, (req,res) =>{
+router.post('/:id', validateProjectId, validateAction, (req,res) =>{
     const {id} = req.user;
-    actionsDb.getProjectActions(id)
-    .then(list =>{
-
-    })
-    .catch(err =>{
-
-    })
-})
-
-router.post('/', validateAction, (req,res) =>{
-    actionsDb.insert(req.body)
+    actionsDb.insert(id, req.body)
     .then(proj =>{
         res.status(200).json(proj);
     })
@@ -94,17 +72,12 @@ function validateProjectId(req,res,next){
         error:err
         }) 
     })
+}
 
 function validateActionId(req,res,next){
     const {id} = req.params;
     actionsDb.get(id)
     .then(proj =>{
-        // if({proj}){
-        //     req.user = proj;
-        //     next();
-        // }else{
-        //     res.status(404).json({message:"the project with that ID doesn't exist."})
-        // }
         if(proj === null){
             res.status(404).json({message:"the project with that ID doesn't exist."})            
         }else{
