@@ -17,7 +17,7 @@ router.get('/', (req,res) =>{
 })
 
 router.get('/:id', validateProjectId, (req,res) =>{
-    
+    res.status(200).json(req.user);
 })
 
 router.post('/', validateProject, (req,res) =>{
@@ -36,11 +36,17 @@ function validateProjectId(req,res,next){
     const {id} = req.params;
     projectDb.get(id)
     .then(proj =>{
-        if({proj}){
+        // if({proj}){
+        //     req.user = proj;
+        //     next();
+        // }else{
+        //     res.status(404).json({message:"the project with that ID doesn't exist."})
+        // }
+        if(proj === null){
+            res.status(404).json({message:"the project with that ID doesn't exist."})            
+        }else{
             req.user = proj;
             next();
-        }else{
-            res.status(404).json({message:"the project with that ID doesn't exist."})
         }
     })
     .catch(err =>{
